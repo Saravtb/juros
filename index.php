@@ -73,12 +73,23 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculo'])) {
             $calculo = $_POST['calculo'];
             echo "<div class='resultado'>";
+
             if ($calculo === 'juros') {
                 echo "<h2>Cálculo de Juros:</h2>";
                 echo "<p>Implemente aqui o cálculo de juros.</p>";
             } elseif ($calculo === 'capital') {
-                echo "<h2>Cálculo de Capital:</h2>";
-                echo "<p>Implemente aqui o cálculo de capital.</p>";
+                $juros = isset($_POST['juros']) ? floatval($_POST['juros']) : 0;
+                $taxa = isset($_POST['taxa']) ? floatval($_POST['taxa']) / 100 : 0; // Conversão para decimal
+                $tempo = isset($_POST['tempo']) ? intval($_POST['tempo']) : 0;
+
+                if ($juros > 0 && $taxa > 0 && $tempo > 0) {
+                    $capital = $juros / ($taxa * $tempo);
+                    echo "<h2>Cálculo de Capital:</h2>";
+                    echo "<p>Capital inicial necessário: R$ " . number_format($capital, 2, ',', '.') . "</p>";
+                } else {
+                    echo "<h2>Erro:</h2>";
+                    echo "<p>Por favor, preencha os campos de Juros, Taxa e Tempo corretamente.</p>";
+                }
             } elseif ($calculo === 'taxa') {
                 echo "<h2>Cálculo de Taxa de Juros:</h2>";
                 echo "<p>Implemente aqui o cálculo da taxa.</p>";
@@ -86,10 +97,10 @@
                 echo "<h2>Cálculo de Prazo:</h2>";
                 echo "<p>Implemente aqui o cálculo do prazo.</p>";
             }
+
             echo "</div>";
         }
         ?>
     </div>
 </body>
 </html>
-
