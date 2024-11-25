@@ -75,14 +75,29 @@
             echo "<div class='resultado'>";
 
             if ($calculo === 'juros') {
-                echo "<h2>Cálculo de Juros:</h2>";
-                echo "<p>Implemente aqui o cálculo de juros.</p>";
+                // Fórmula para calcular os juros
+                $capital = isset($_POST['capital']) ? floatval($_POST['capital']) : 0;
+                $taxa = isset($_POST['taxa']) ? floatval($_POST['taxa']) / 100 : 0; // Conversão para decimal
+                $tempo = isset($_POST['tempo']) ? intval($_POST['tempo']) : 0;
+
+                if ($capital > 0 && $taxa > 0 && $tempo > 0) {
+                    // Calculando juros: J = C * i * N
+                    $juros = $capital * $taxa * $tempo;
+                    echo "<h2>Cálculo de Juros:</h2>";
+                    echo "<p>Juros gerados: R$ " . number_format($juros, 2, ',', '.') . "</p>";
+                } else {
+                    echo "<h2>Erro:</h2>";
+                    echo "<p>Por favor, preencha os campos corretamente.</p>";
+                }
+
             } elseif ($calculo === 'capital') {
+                // Fórmula para calcular o capital
                 $juros = isset($_POST['juros']) ? floatval($_POST['juros']) : 0;
                 $taxa = isset($_POST['taxa']) ? floatval($_POST['taxa']) / 100 : 0; // Conversão para decimal
                 $tempo = isset($_POST['tempo']) ? intval($_POST['tempo']) : 0;
 
                 if ($juros > 0 && $taxa > 0 && $tempo > 0) {
+                    // Fórmula: C = J / (i * N)
                     $capital = $juros / ($taxa * $tempo);
                     echo "<h2>Cálculo de Capital:</h2>";
                     echo "<p>Capital inicial necessário: R$ " . number_format($capital, 2, ',', '.') . "</p>";
@@ -90,12 +105,38 @@
                     echo "<h2>Erro:</h2>";
                     echo "<p>Por favor, preencha os campos de Juros, Taxa e Tempo corretamente.</p>";
                 }
+
             } elseif ($calculo === 'taxa') {
-                echo "<h2>Cálculo de Taxa de Juros:</h2>";
-                echo "<p>Implemente aqui o cálculo da taxa.</p>";
+                // Fórmula para calcular a taxa
+                $capital = isset($_POST['capital']) ? floatval($_POST['capital']) : 0;
+                $juros = isset($_POST['juros']) ? floatval($_POST['juros']) : 0;
+                $tempo = isset($_POST['tempo']) ? intval($_POST['tempo']) : 0;
+
+                if ($capital > 0 && $juros > 0 && $tempo > 0) {
+                    // Fórmula: i = J / (C * N) * 100
+                    $taxa = ($juros / ($capital * $tempo)) * 100;
+                    echo "<h2>Cálculo de Taxa de Juros:</h2>";
+                    echo "<p>Taxa de Juros: " . number_format($taxa, 2, ',', '.') . " %</p>";
+                } else {
+                    echo "<h2>Erro:</h2>";
+                    echo "<p>Por favor, preencha os campos de Capital, Juros e Tempo corretamente.</p>";
+                }
+
             } elseif ($calculo === 'prazo') {
-                echo "<h2>Cálculo de Prazo:</h2>";
-                echo "<p>Implemente aqui o cálculo do prazo.</p>";
+                // Fórmula para calcular o prazo
+                $capital = isset($_POST['capital']) ? floatval($_POST['capital']) : 0;
+                $juros = isset($_POST['juros']) ? floatval($_POST['juros']) : 0;
+                $taxa = isset($_POST['taxa']) ? floatval($_POST['taxa']) / 100 : 0;
+
+                if ($capital > 0 && $juros > 0 && $taxa > 0) {
+                    // Fórmula: N = J / (C * i)
+                    $tempo = $juros / ($capital * $taxa);
+                    echo "<h2>Cálculo de Prazo:</h2>";
+                    echo "<p>Tempo necessário: " . number_format($tempo, 0, ',', '.') . " meses</p>";
+                } else {
+                    echo "<h2>Erro:</h2>";
+                    echo "<p>Por favor, preencha os campos corretamente.</p>";
+                }
             }
 
             echo "</div>";
